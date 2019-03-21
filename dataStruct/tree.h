@@ -2,6 +2,7 @@
 #include <stack>
 #include <vector>
 #include <queue>
+#include <climits>
 //#include <algorithm>
 using namespace std;
 
@@ -309,32 +310,29 @@ public:
 		}
 	}
 	//98. Validate Binary Search Tree
+	//需要考虑隔代节点的大小
+	//solution 1.很好理解的方案。但是没有accept，感觉像是Lcode的例子有问题似的....
 	bool isValidBST(TreeNode* root)
 	{
-		if (root == nullptr)
+		if (root == NULL)
 			return true;
-		bool isLeft = false;
-		if (root->left == NULL)
-			isLeft = true;
-		else
-		{
-			if (root->val > root->left->val)
-				isLeft = true;
-			else
-				isLeft = false;
-		}
 
-		bool isRight = false;
-		if (root->right == NULL)
-			isRight = true;
-		else
-		{
-			if (root->val < root->right->val)
-				isRight = true;
-			else
-				isRight = false;
-		}
-		return isRight && isLeft && isValidBST(root->left) && isValidBST(root->right);
+		return dfs(root, INT_MIN, INT_MAX);
+	}
+	bool dfs(TreeNode* root, int low, int up)
+	{
+		if (root == NULL)
+			return true;
+
+		if (root->val >= up || root->val <= low)
+			return false;
+		return dfs(root->left, low, root->val) && dfs(root->right, root->val, up);
+	}
+
+	//solution 2. from LCode. 递归
+	bool isValidBST_recursive(TreeNode* root)
+	{
+
 	}
 
 	//104. Maximum Depth of Binary Tree
